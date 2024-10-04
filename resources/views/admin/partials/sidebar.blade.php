@@ -2,7 +2,7 @@
 <div class="iq-sidebar">
     <div class="iq-sidebar-logo d-flex justify-content-between">
         <a href="index.html" class="header-logo">
-            <img src="adminTemplate/assets/images/logo.png" class="img-fluid rounded-normal" alt="">
+            <img src="/adminTemplate/assets/images/logo.png" class="img-fluid rounded-normal" alt="">
             <div class="logo-title">
                 <span class="text-primary text-uppercase">Booksto</span>
             </div>
@@ -26,9 +26,8 @@
                     </a>
                 </li>
 
-                <!-- active menu-active -->
                 <li class="{{ request() -> is('category*') ? 'active menu-active' : ''}}">
-                    <a href="#catagory" class="iq-waves-effect collapsed" data-toggle="collapse" aria-expanded="">
+                    <a href="#catagory" class="iq-waves-effect collapsed" data-toggle="collapse">
                         <span class="ripple rippleEffect"></span><i class="ri-function-line"></i>
                         <span>Quản lý danh mục</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
 
@@ -44,7 +43,7 @@
                 </li>
 
                 <li class="{{ request() -> is('news*') ? 'active menu-active' : ''}}">
-                    <a href="#product" class="iq-waves-effect collapsed" data-toggle="collapse" aria-expanded="">
+                    <a href="#product" class="iq-waves-effect collapsed" data-toggle="collapse">
                         <span class="ripple rippleEffect"></span><i class="ri-shirt-line"></i>
                         <span>Quản lý tin</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
                     <ul id="product" class="iq-submenu collapse {{ request() -> is('news*') ? 'show' : ''}}" data-parent="#iq-sidebar-toggle">
@@ -61,7 +60,7 @@
                 </li>
 
                 <li class="">
-                    <a href="#userinfo" class="iq-waves-effect collapsed" data-toggle="collapse" aria-expanded="">
+                    <a href="#userinfo" class="iq-waves-effect collapsed" data-toggle="collapse">
                         <span class="ripple rippleEffect"></span><i class="las la-user-tie iq-arrow-left"></i>
                         <span>Quản lý tài khoản</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
                     <ul id="userinfo" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
