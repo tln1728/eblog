@@ -19,19 +19,33 @@
     <div id="sidebar-scrollbar">
         <nav class="iq-sidebar-menu">
             <ul id="iq-sidebar-toggle" class="iq-menu">
-                <li class="{{ request() -> is('admin') ? 'active menu-active' : ''}}">
-                    <a href="/admin" class="iq-waves-effect">
-                        <span class="ripple rippleEffect"></span><i class="las la-home iq-arrow-left"></i>
-                        <span>Tổng quan</span>
-                    </a>
-                </li>
-
-                <x-admin.sidebar-item type="category">Danh mục</x-admin.sidebar-item>
                 
-                <x-admin.sidebar-item type="news">Tin</x-admin.sidebar-item>
+                <x-admin.sidebar.item type="admin">
+                    <i class="las la-home iq-arrow-left"></i>
+                    <span>Tổng quan</span>
+                </x-admin.sidebar.item>
+
+                <x-admin.sidebar.item type="category">
+                    <i class="ri-shirt-line"></i>
+                    <span>Quản lý danh mục</span>
+                   
+                    <x-slot:sidebar_links>
+                        <x-admin.sidebar.link-add  path="category">Thêm danh mục</x-admin.sidebar.link-add>
+                        <x-admin.sidebar.link-list path="category">Danh sách danh mục</x-admin.sidebar.link-list>
+                    </x-slot>
+                </x-admin.sidebar.item>
+                
+                <x-admin.sidebar.item type="news">
+                    <i class="ri-function-line"></i>
+                    <span>Quản lý tin</span>
+                   
+                    <x-slot:sidebar_links>
+                        <x-admin.sidebar.link-add  path="news">Thêm tin</x-admin.sidebar.link-add>
+                        <x-admin.sidebar.link-list path="news">Danh sách tin</x-admin.sidebar.link-list>
+                    </x-slot>
+                </x-admin.sidebar.item>
 
                 <!-- 
-                <i class="ri-shirt-line"></i>
                 <i class="las la-user-tie iq-arrow-left"></i>
                 <span>Quản lý bình luận</span>
                 <span>Biểu đồ thống kê</span></a> -->
