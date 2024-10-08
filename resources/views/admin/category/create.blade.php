@@ -36,3 +36,19 @@
 </div>
 
 @endsection
+
+<!-- php
+$default = [
+    "class"  => "max-w-2xl mx-auto space-y-5",
+    "method" => "GET",
+];
+endphp
+
+<form { $attributes($default)}}>
+    if ($attributes->get('method', $default['method']) !== 'GET')
+        csrf
+        method($attributes->get('method'))
+    endif
+
+    { $slot }}
+</form> -->

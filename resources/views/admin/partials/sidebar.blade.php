@@ -26,75 +26,22 @@
                     </a>
                 </li>
 
-                <li class="{{ request() -> is('category*') ? 'active menu-active' : ''}}">
-                    <a href="#catagory" class="iq-waves-effect collapsed" data-toggle="collapse">
-                        <span class="ripple rippleEffect"></span><i class="ri-function-line"></i>
-                        <span>Quản lý danh mục</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
+                <x-admin.sidebar-item type="category">Danh mục</x-admin.sidebar-item>
+                
+                <x-admin.sidebar-item type="news">Tin</x-admin.sidebar-item>
 
-                    <ul id="catagory" class="iq-submenu collapse {{ request() -> is('category*') ? 'show' : ''}}" data-parent="#iq-sidebar-toggle">
-                        <li class="{{ request() -> is('category/create') ? 'active menu-active' : ''}}">
-                            <a href="{{route('category.create')}}"><i class="las la-plus-circle"></i>Thêm danh mục</a>
-                        </li>
-
-                        <li class="{{ request() -> is('category') ? 'active menu-active' : ''}}">
-                            <a href="{{route('category.index')}}"><i class="las la-th-list"></i>Danh sách danh mục</a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="{{ request() -> is('news*') ? 'active menu-active' : ''}}">
-                    <a href="#product" class="iq-waves-effect collapsed" data-toggle="collapse">
-                        <span class="ripple rippleEffect"></span><i class="ri-shirt-line"></i>
-                        <span>Quản lý tin</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
-                    <ul id="product" class="iq-submenu collapse {{ request() -> is('news*') ? 'show' : ''}}" data-parent="#iq-sidebar-toggle">
-
-                        <li class="{{ request() -> is('news/create') ? 'active menu-active' : ''}}">
-                            <a href="{{route('news.create')}}"><i class="las la-plus-circle"></i>Thêm tin</a>
-                        </li>
-
-                        <li class="{{ request() -> is('news') ? 'active menu-active' : ''}}">
-                            <a href="{{route('news.index')}}"><i class="las la-th-list"></i>Danh sách tin</a>
-                        </li>
-
-                    </ul>
-                </li>
-
-                <li class="">
-                    <a href="#userinfo" class="iq-waves-effect collapsed" data-toggle="collapse">
-                        <span class="ripple rippleEffect"></span><i class="las la-user-tie iq-arrow-left"></i>
-                        <span>Quản lý tài khoản</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
-                    <ul id="userinfo" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
-                        <li class=""><a href="#"><i class="las la-plus-circle"></i>Thêm tài khoản</a></li>
-                        <li class=""><a href="#"><i class="las la-th-list"></i>Danh sách tài khoản</a></li>
-                    </ul>
-                </li>
-
-                <!-- <li class="">
-                    <a href="#" class="iq-waves-effect">
-                        <span class="ripple rippleEffect"></span><i class="ri-bill-line"></i>
-                        <span>Quản lý đơn hàng</span>
-                    </a>
-                </li> -->
-
-                <li class="">
-                    <a href="#" class="iq-waves-effect">
-                        <span class="ripple rippleEffect"></span><i class="ri-message-2-line"></i>
-                        <span>Quản lý bình luận</span>
-                    </a>
-                </li>
-
-                <!-- <li class="">
-                    <a href="#" class="iq-waves-effect">
-                        <span class="ripple rippleEffect"></span><i class="ri-pie-chart-box-line"></i>
-                        <span>Biểu đồ thống kê</span></a>
-                </li> -->
+                <!-- 
+                <i class="ri-shirt-line"></i>
+                <i class="las la-user-tie iq-arrow-left"></i>
+                <span>Quản lý bình luận</span>
+                <span>Biểu đồ thống kê</span></a> -->
 
                 <li>
                     <a href="/" class="iq-waves-effect">
                         <span class="ripple rippleEffect"></span>
-                        <span>Về trang web</span></a>
+                        <span>Về trang web</span>
+                    </a>
                 </li>
-
             </ul>
         </nav>
     </div>

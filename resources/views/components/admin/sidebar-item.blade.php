@@ -1,23 +1,33 @@
-<li class="{{ request() -> is('category*') ? 'active menu-active' : ''}}">
-    <a href="#catagory" class="iq-waves-effect collapsed" data-toggle="collapse">
+@props(['type'])
+
+@php
+$class        = request() -> is($type.'*')       ? 'active' : '';
+$class_create = request() -> is($type.'/create') ? 'active' : '';
+$class_list   = request() -> is($type)           ? 'active' : '';
+$class_child  = request() -> is($type.'*')       ? 'show'   : '';
+@endphp
+
+
+<li class="{{$class}}" >
+    <a href="#{{$type}}" class="iq-waves-effect collapsed" data-toggle="collapse">
         <span class="ripple rippleEffect"></span>
         <i class="ri-function-line"></i>
-        <span>Quản lý danh mục</span>
+        <span>Quản lý {{$slot}}</span>
         <i class="ri-arrow-right-s-line iq-arrow-right"></i>
     </a>
 
-    <ul id="catagory" class="iq-submenu collapse {{ request() -> is('category*') ? 'show' : ''}}" data-parent="#iq-sidebar-toggle">
-        <li class="{{ request() -> is('category/create') ? 'active menu-active' : ''}}">
-            <a href="{{route('category.create')}}">
+    <ul id="{{$type}}" class="iq-submenu collapse {{$class_child}}" data-parent="#iq-sidebar-toggle">
+        <li class="{{$class_create}}">
+            <a href="{{route($type.'.create')}}">
                 <i class="las la-plus-circle"></i>
-                Thêm danh mục
+                Thêm {{$slot}}
             </a>
         </li>
 
-        <li class="{{ request() -> is('category') ? 'active menu-active' : ''}}">
-            <a href="{{route('category.index')}}">
+        <li class="{{$class_list}}">
+            <a href="{{route($type.'.index')}}">
                 <i class="las la-th-list"></i>
-                Danh sách danh mục
+                Danh sách {{$slot}}
             </a>
         </li>
     </ul>
