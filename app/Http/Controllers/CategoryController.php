@@ -12,7 +12,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('admin.category.index');
+        return view('admin.category.index', [
+            'categories' => Category::withCount('news') -> latest('id') -> simplePaginate(10),
+        ]);
     }
 
     /**
@@ -28,7 +30,18 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request -> all());
+        $data = $request -> validate([
+            'title' => 'required | unique:categories',
+        ],
+        [
+            'title.required' => 'Không được để trống',
+            'title.unique'   => 'Tiêu đề đẫ tồn tại',
+        ]);
+        
+        Category::create($data);
+
+        return redirect() -> route('category.index') 
+        -> with('success', 'Category created successfully!');
     }
 
     /**
@@ -44,7 +57,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('admin.category.edit', ['category' => $category]);
     }
 
     /**
@@ -52,7 +65,18 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $data = $request -> validate([
+            'title' => 'required | unique:categories,title,'.$category -> id,
+        ],
+        [
+            'title.required' => 'Không được để trống',
+            'title.unique'   => 'Tiêu đề đã tồn tại',
+        ]);
+
+        $category->update($data);
+
+        return redirect() -> route('category.index') 
+        -> with('success', 'Category update successfully!');
     }
 
     /**
@@ -60,6 +84,9 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+
+        return redirect() -> route('category.index')
+        ->with('success', 'Xóa danh mục thành công.');
     }
 }
