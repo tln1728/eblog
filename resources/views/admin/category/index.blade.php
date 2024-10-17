@@ -43,9 +43,7 @@
                                     <div class="flex align-items-center list-user-action">
                                         <a class="bg-primary" title="Sửa" href="{{ route('category.edit' ,$cat -> id) }}"><i class="ri-pencil-line"></i></a>
                                        
-                                        <form action="{{ route('category.destroy' ,$cat -> id) }}" class="d-inline" method="POST">
-                                            @csrf
-                                            @method('DELETE')
+                                        <form action="{{ route('category.destroy' ,$cat -> id) }}" class="d-inline" method="DELETE">
                                             <button onclick="return confirm('?')" type="submit" class="bg-primary text-white border-0 rounded" title="Xóa">
                                                 <i class="ri-delete-bin-line"></i>
                                             </button>
