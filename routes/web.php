@@ -21,10 +21,9 @@ Route::controller(ClientController::class) -> group( function() {
 Route::controller(AdminController::class) -> prefix('admin') -> group( function() {
     Route::get('/'    , 'index');
     Route::get('category' , 'category');
+    Route::resource('category', CategoryController::class);
+    Route::resource('news', NewsController::class);
 });
-
-Route::resource('category', CategoryController::class);
-Route::resource('news', NewsController::class);
 
 Route::get('/test', function() {
     return view('client.result');
