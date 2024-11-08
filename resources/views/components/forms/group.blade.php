@@ -1,10 +1,11 @@
-@props(['error'])
+@props(['error','class'])
 
 @php
+    $default_class = "form-group";
     $error_class = 'has-error'
 @endphp
 
-<div class="form-group @error($error){{$error_class}}@enderror">
+<div class="{{$class ?? $default_class}} @error($error){{$error_class}}@enderror">
     {{ $slot }}
     
     @error($error)

@@ -48,7 +48,7 @@ class NewsController extends Controller
                 $data['thumbnail'] = $thumbnailPath;
             }
             // ---
-            $data['user_id'] = 1;
+            $data['user_id'] = Auth::user() -> id;
 
             $news = News::create($data);
 

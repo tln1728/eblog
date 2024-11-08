@@ -76,12 +76,20 @@
                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-5 col-4 position-relative">
                     <div class="eblog-header-top-subs-social-menu">
                         <div class="eblog-header-top-subs-social">
-                            <div class="eblog-header-top-subscribe-btn">
-                                <a href="#" class="eblog-py-btn" onclick="document.getElementById('id01').style.display='inline'">Subscribe</a>
-                            </div>
-                            <div class="eblog-header-top-login-btn">
-                                <a href="#" class="eblog-login-btn">Login</a>
-                            </div>
+                            @auth
+                                <x-forms.form action="/logout" method="DELETE">
+                                    <button type="submit" class="text-danger">Logout</button>
+                                </x-forms.form>
+                            @endauth
+
+                            @guest
+                                <div class="eblog-header-top-subscribe-btn">
+                                    <a href="{{route('register')}}" class="eblog-login-btn">Đăng ký</a>
+                                </div>
+                                <div class="eblog-header-top-login-btn">
+                                    <a href="{{route('login')}}" class="eblog-login-btn">Đăng nhập</a>
+                                </div>
+                            @endguest
                         </div>
                     </div>
                 </div>
