@@ -45,8 +45,16 @@
                     </x-slot>
                 </x-admin.sidebar.item>
 
+                <x-admin.sidebar.item type="users">
+                    <i class="las la-user-tie iq-arrow-left"></i>
+                    <span>Quản lý tài khoản</span>
+                   
+                    <x-slot:sidebar_links>
+                        <x-admin.sidebar.link-list path="users">Danh sách người dùng</x-admin.sidebar.link-list>
+                    </x-slot>
+                </x-admin.sidebar.item>
+
                 <!-- 
-                <i class="las la-user-tie iq-arrow-left"></i>
                 <span>Quản lý bình luận</span>
                 <span>Biểu đồ thống kê</span></a> -->
 

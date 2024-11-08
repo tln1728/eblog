@@ -12,6 +12,13 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const ROLE_ADMIN = 0;
+    const ROLE_USER = 1;
+
+    const STATUS_ACTIVE = 0;
+    const STATUS_INACTIVE = 1;
+    const STATUS_BANNED = 2;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -42,4 +49,37 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function getStatusTextAttribute()
+    {
+        switch ($this->status) {
+            case self::STATUS_ACTIVE:
+                return 'Active';
+
+            case self::STATUS_BANNED:
+                return 'Banned';
+                
+            case self::STATUS_INACTIVE:
+                return 'Inactive';
+        }
+    }
+
+    public function getStatusClassAttribute()
+    {
+        switch ($this->status) {
+            case self::STATUS_ACTIVE:
+                return 'badge badge-primary';
+
+            case self::STATUS_BANNED:
+                return 'badge badge-warning';
+                
+            case self::STATUS_INACTIVE:
+                return 'badge badge-danger'; 
+        }
+    }
+
+
+    public function news() {
+        return $this -> hasMany(News::class);
+    }
 }

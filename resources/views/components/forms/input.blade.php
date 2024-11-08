@@ -1,16 +1,31 @@
-@props(['label' => false, 'name'])
+@props(['label' => false, 'name', 'type' => 'text'])
 
 @php
 $defaults = [
-    'type' => 'text',
     'name' => $name,
+    'id'   => $name,
+    'type' => $type,
     'class' => 'form-control',
     'value' => old($name)
 ];
 @endphp
 
 @if ($label)
-    <label>{{ $label }}</label>
+    <label for="{{$name}}">{{$label}}</label>
 @endif
 
-<input {{ $attributes($defaults) }}>
+@switch($type)
+    @case('select')
+        <select {{$attributes($defaults)}}>
+            {{$slot}}
+        </select>
+    @break
+
+    @case('file')
+        <input {{$attributes -> merge($defaults) -> except('class')}}>
+    @break
+
+    @default
+        <input {{$attributes($defaults)}}>
+
+@endswitch

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\News;
 use App\Http\Requests\StoreNewsRequest;
 use App\Http\Requests\UpdateNewsRequest;
+use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class NewsController extends Controller
 {
@@ -13,7 +16,9 @@ class NewsController extends Controller
      */
     public function index()
     {
-        return view('admin.news.index');
+        return view('admin.news.index', [
+            'news' => News::with(['categories','user']) -> latest('id') -> paginate(10),
+        ]);
     }
 
     /**
@@ -21,7 +26,9 @@ class NewsController extends Controller
      */
     public function create()
     {
-        return view('admin.news.create');
+        return view('admin.news.create',[
+            'cats' => Category::pluck('title', 'id'),
+        ]);
     }
 
     /**
@@ -29,7 +36,33 @@ class NewsController extends Controller
      */
     public function store(StoreNewsRequest $request)
     {
-        //
+        DB::beginTransaction();
+        
+        try {
+            $data = $request -> validated();
+            
+            // xu ly anh
+            $thumbnailPath = null;
+            if ($request -> hasFile('thumbnail')) {
+                $thumbnailPath = $request -> file('thumbnail') -> store('thumbnails');
+                $data['thumbnail'] = $thumbnailPath;
+            }
+            // ---
+            $data['user_id'] = 1;
+
+            $news = News::create($data);
+
+            // thêm vào bảng pivot category_news
+            $news -> categories() -> attach($data['category']);
+            
+            DB::commit();
+
+            return redirect() -> route('news.index')->with('success', 'Thêm tin thành công');
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect() -> back() -> with(['error' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -45,7 +78,13 @@ class NewsController extends Controller
      */
     public function edit(News $news)
     {
-        //
+        $selectedCategory = $news -> categories -> pluck('id') -> toArray();
+
+        return view('admin.news.edit',[
+            'cats' => Category::pluck('title', 'id'),
+            'selectedCategory' => $selectedCategory,
+            'new' => $news,
+        ]);
     }
 
     /**
@@ -53,7 +92,33 @@ class NewsController extends Controller
      */
     public function update(UpdateNewsRequest $request, News $news)
     {
-        //
+        DB::beginTransaction();
+        
+        try {
+            $data = $request -> validated();
+
+            // xu ly anh
+            $thumbnailPath = null;
+            if ($request -> hasFile('thumbnail')) {
+
+                $thumbnailPath = $request -> file('thumbnail') -> store('thumbnails');
+                $data['thumbnail'] = $thumbnailPath;
+
+            } else $data['thumbnail'] = $news -> thumbnail;
+            // ---
+            
+            $news -> update($data);
+            
+            $news -> categories() -> sync($data['category']);
+
+            DB::commit();
+
+            return redirect() -> route('news.index')->with('success', 'Sửa tin thành công');
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect() -> back() -> with(['error' => $e->getMessage()]);
+        }
     }
 
     /**
@@ -61,6 +126,9 @@ class NewsController extends Controller
      */
     public function destroy(News $news)
     {
-        //
+        $news->delete();
+
+        return redirect() -> route('news.index')
+        ->with('success', 'Xóa tin thành công.');
     }
 }

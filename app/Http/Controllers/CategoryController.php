@@ -12,8 +12,13 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        $sort = request() -> get('sort', 'id');
+        $direction = request() -> get('direction', 'desc');
+        
         return view('admin.category.index', [
-            'categories' => Category::withCount('news') -> latest('id') -> simplePaginate(10),
+            'categories' => Category::withCount('news') 
+            -> orderBy($sort, $direction) 
+            -> simplePaginate(10),
         ]);
     }
 

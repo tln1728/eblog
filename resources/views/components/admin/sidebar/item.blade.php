@@ -18,11 +18,10 @@
 </li>
 
 @else
-    <li class="{{set_active_class("admin")}}">
+    <li class="{{ request() -> is('admin') ? 'active' : "" }}">
         <a href="/admin" class="iq-waves-effect">
             <span class="ripple rippleEffect"></span><i class="las la-home iq-arrow-left"></i>
             <span>Tổng quan</span>
         </a>
     </li>
 @endif
-

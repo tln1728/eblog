@@ -11,7 +11,7 @@ class UpdateNewsRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,24 @@ class UpdateNewsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title'      => 'required|max:255',
+            'category'   => 'required|array',
+            'category.*' => 'exists:categories,id', // Kiểm tra danh mục có tồn tại trong bảng categories
+            'content'    => 'required',
+            'summary'    => 'required',
+            'thumbnail'  => 'image|mimes:jpg,png,webp|max:4096',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'title.required'     => 'Tiêu đề là bắt buộc',
+            'category.required'  => 'Bạn phải chọn một danh mục',
+            'category.*'         => 'Danh mục không hợp lệ',
+            'content.required'   => 'Nội dung không được để trống',
+            'summary.required'   => 'Vui lòng nhập tóm tắt',
+            'thumbnail.image'    => 'Ảnh không đúng định dạng jpg, png hoặc webp',
         ];
     }
 }
