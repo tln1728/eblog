@@ -5,60 +5,31 @@
             <div class="row align-items-center plr_md--30 plr_sm--30 plr--10">
                 <div class="col-xl-2 col-lg-2 col-md-7 col-sm-7 col-7 p-0">
                     <div class="eblog-site-logo">
-                        <a class="logo-light" href="index-2.html"><img src="client/assets/images/logo/logo-01.svg" alt="eblog"></a>
+                        <a class="logo-light" href="/"><img src="/client/assets/images/logo/logo-01.svg" alt="eblog"></a>
                     </div>
                 </div>
-
                 <div class="col-xl-8 col-lg-8 d-none d-lg-block">
                     <nav>
                         <div class="eblog-home-1-menu">
                             <ul class="list-unstyled eblog-desktop-menu">
                                 <li class="menu-item eblog-has-dropdown">
-                                    <a href="#" class="eblog-dropdown-main-element active">Home</a>
-                                    <!-- Start Dropdown Menu -->
-                                    <ul class="eblog-submenu list-unstyled menu-home">
-                                        <li class="nav-item"><a href="index-2.html">Home 01 - Technology</a></li>
-                                        <li class="nav-item"><a href="index-two.html">Home 02 - Life Style</a></li>
-                                        <li class="nav-item"><a href="index-three.html">Home 03 - Travel</a></li>
-                                        <li class="nav-item"><a href="index-four.html">Home 04 - Food</a></li>
-                                        <li class="nav-item"><a href="index-five.html">Home 05 - Sports</a></li>
-                                    </ul>
-                                    <!-- End Dropdown Menu -->
+                                    <a href="/" >Trang chủ</a>
                                 </li>
                                 <li class="menu-item eblog-has-dropdown">
-                                    <a href="#" class="eblog-dropdown-main-element">Post</a>
+                                    <a href="/category/all" class="eblog-dropdown-main-element">Danh mục</a>
                                     <ul class="eblog-submenu list-unstyled menu-pages">
-                                        <li class="nav-item"><a href="column-layout.html">Post Column</a></li>
-                                        <li class="nav-item"><a href="column-layout-grid.html">Post Grid</a></li>
-                                        <li class="nav-item"><a href="column-layout-right-sidebar.html">Post Right Sidebar</a></li>
-                                        <li class="nav-item"><a href="column-layout-left-sidebar.html">Post Left Sidebar</a></li>
+                                        @foreach ($categories as $cat)
+                                        <li class="nav-item"><a href="{{route('category.show',$cat -> title)}}">{{$cat->title}}</a></li>
+                                        @endforeach
                                     </ul>
                                 </li>
-                                <li class="menu-item eblog-has-dropdown">
-                                    <a href="#" class="eblog-dropdown-main-element">Post Details</a>
-                                    <ul class="eblog-submenu list-unstyled menu-pages">
-                                        <li class="nav-item"><a href="blog-details.html">Post Details</a></li>
-                                        <li class="nav-item"><a href="blog-details-2.html">Post Details 2</a></li>
-                                        <li class="nav-item"><a href="blog-details-3.html">Post Details 3</a></li>
-                                    </ul>
-                                </li>
-                                <li class="menu-item eblog-has-dropdown">
-                                    <a href="#" class="eblog-dropdown-main-element">Pages</a>
-                                    <ul class="eblog-submenu list-unstyled menu-pages">
-                                        <li class="nav-item"><a href="author.html">Author</a></li>
-                                        <li class="nav-item"><a href="sign-in.html">Sign In</a></li>
-                                        <li class="nav-item"><a href="sign-up.html">Sign Up</a></li>
-                                        <li class="nav-item"><a href="reset-password.html">Reset Password</a></li>
-                                        <li class="nav-item"><a href="coming-soon.html">Comming Soon</a></li>
-                                        <li class="nav-item"><a href="error.html">Error 404</a></li>
-                                    </ul>
-                                </li>
-                                <li class="menu-item"><a href="index-two.html" class="eblog-dropdown-main-element">Life Style</a></li>
+                                <li class="menu-item"><a href="#" class="eblog-dropdown-main-element">Giới thiệu</a></li>
+                                <li class="menu-item"><a href="#" class="eblog-dropdown-main-element">Về chúng tôi</a></li>
+                                <li class="menu-item"><a href="#" class="eblog-dropdown-main-element">Liên lạc</a></li>
                             </ul>
                         </div>
                     </nav>
                 </div>
-
                 <div class="col-xl-2 col-lg-2 col-md-5 col-sm-5 col-5 p-0">
                     <div class="eblog-header-top-social-media">
                         <a href="#" id="search" class="eblog-header-top-search-btn search-icon action-item icon">
@@ -70,7 +41,9 @@
                             <div class="container">
                                 <div class="search-input-inner">
                                     <div class="input-div">
-                                        <input id="searchInput1" class="search-input" type="text" placeholder="Search by keyword or #">
+                                        <x-forms.form action="{{route('search_news')}}">
+                                            <input id="searchInput1" value="{{$kw??''}}"  class="search-input" type="text" name="kw" placeholder="Search by keyword or #">
+                                        </x-forms.form>
                                     </div>
                                     <div class="search-close-icon"><i class="fa-regular fa-xmark-large rt-xmark"></i></div>
                                 </div>

@@ -37,7 +37,7 @@
                         @foreach ($news as $new)
                         <tr>
                             <td>
-                                <a href="{{route('post',$new -> id)}}" class="text-dark font-weight-bold">{{ $new -> title }}<i class="ri-arrow-right-up-line"></i></a>
+                                <a href="{{route('news.show',$new -> slug)}}" class="text-dark font-weight-bold">{{ $new -> title }}<i class="ri-arrow-right-up-line"></i></a>
                             </td>
                             
                             <td><a href="" class="text-dark">{{ $new -> user -> name  }}</a></td>

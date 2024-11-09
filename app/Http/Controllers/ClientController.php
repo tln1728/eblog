@@ -12,52 +12,37 @@ class ClientController extends Controller
         return view('client.home');
     }
 
-    public function post(News $news) {
-        return view('client.single-post', ['new' => $news]);
+    function search_news()
+    {
+        $kw = request()->kw;
+
+        // Trả về view với thông báo không có kết quả và không có bài viết nào
+        if (empty($kw)) {
+            return view('client.result', [
+                'news'           => collect(),
+                'totalNewsCount' => 0,
+            ]);
+        }
+        
+        // Sử dụng query builder thay vì trực tiếp vào Eloquent để dễ dàng xử lý
+        $newsQuery = News::query();  
+
+        if ($kw) {
+            // Nếu có từ khóa, áp dụng tìm kiếm
+            $newsQuery->where('title', 'like', '%' . $kw . '%');
+        }
+
+        // Lấy tổng số bài viết tìm được (không phân trang)
+        $totalNewsCount = $newsQuery->count();  
+
+        // Thực hiện phân trang với 10 kết quả mỗi trang
+        $news = $newsQuery -> paginate(10) -> appends(['kw' => $kw]);
+
+        // Trả về view với kết quả tìm kiếm
+        return view('client.result', [
+            'news' => $news,
+            'kw' => $kw,
+            'totalNewsCount' => $totalNewsCount,  // Truyền tổng số bài viết tìm được
+        ]);
     }
 }
-
-// <?php
-
-// namespace App\Http\Controllers;
-
-// use App\Models\Category;
-// use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\DB;
-
-// class ClientController extends Controller
-// {
-//     function index()
-//     {
-//         // banner
-//         $mostViewPosts = DB::table('news')->orderByDesc('views')->limit(3)->get();
-
-//         $latestNews = DB::table('news')->orderByDesc('id')->limit(4)->get();
-//         // dd($latestNews);
-//         return view('client.layout.index', compact('mostViewPosts', 'latestNews'));
-//     }
-
-//     function getPostIn(Category $category, $id)
-//     {
-//         $category = $category -> find($id); 
-        
-//         $title = $category -> title;
-//         $allPosts = $category -> news() -> paginate(5);
-    
-//         return view('client.layout.category', compact('title', 'allPosts'));
-//     }
-
-//     function newsDetail($id)
-//     {
-//         $post = DB::table('news')->find($id);
-//         return view('client.layout.news', compact('post'));
-//     }
-
-//     function testSearch()
-//     {
-//         $kw = $_POST['keyword'];
-//         $title = 'Kết quả tìm kiếm cho: '. $kw;
-//         $allPosts = DB::table('news')->where('title','like','%'.$kw.'%')->get();
-//         return view('client.layout.category', compact('title', 'allPosts'));
-//     }
-// }

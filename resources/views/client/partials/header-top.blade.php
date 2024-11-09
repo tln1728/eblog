@@ -54,7 +54,7 @@
                 <div class="col-xl-4 col-lg-4 d-none d-lg-block">
                     <div class="eblog-meta-total-jobs">
                         <div class="eblog-meta-jobs-icons">
-                            <img src="client/assets/images/icon/bolt.svg" width="11" alt="eblog">
+                            <img src="/client/assets/images/icon/bolt.svg" width="11" alt="eblog">
                         </div>
                         <div class="eblog-meta-jobs-text">
                             <div class="swiper tp-treding-slider10">

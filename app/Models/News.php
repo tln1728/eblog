@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class News extends Model
 {
@@ -23,5 +24,16 @@ class News extends Model
 
     public function user() {
         return $this -> belongsTo(User::class);
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($news) {
+            $slug = Str::slug($news->title);
+            $count = News::where('slug', 'LIKE', "{$slug}%")->count();
+            $news->slug = $count ? "{$slug}-{$count}" : $slug;
+        });
     }
 }

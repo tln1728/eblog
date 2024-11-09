@@ -17,7 +17,7 @@ class NewsController extends Controller
     public function index()
     {
         return view('admin.news.index', [
-            'news' => News::with(['categories','user']) -> latest('id') -> paginate(10),
+            'news' => News::with(['categories:id,title','user:id,name']) -> latest('id') -> paginate(10),
         ]);
     }
 
@@ -70,7 +70,9 @@ class NewsController extends Controller
      */
     public function show(News $news)
     {
-        //
+        return view('client.single-post',[
+            'new' => $news,
+        ]);
     }
 
     /**

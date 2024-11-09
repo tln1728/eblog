@@ -10,34 +10,37 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(ClientController::class) -> group( function() {
-    Route::get('/', 'index')          -> name('home');
-
-    Route::get('post/{news}', 'post') -> name('post');
-
-    // Route::get('category/{id}','getPostIn');
-
-    // Route::post('search','testSearch');
-
-    // Route::get('findnews/{id}','newsDetail');
+    Route::get('/', 'index')               -> name('home');
+    Route::get('search',  'search_news')   -> name('search_news');
 });
 
-Route::controller(AdminController::class) -> prefix('admin') -> group( function() {
+
+// 
+Route::get('category/{category:title}', [CategoryController::class,  'show']) -> name('category.show');
+Route::get('new/{news:slug}',           [NewsController::class,      'show']) -> name('news.show');
+
+
+// Admin crud
+Route::middleware('auth') -> controller(AdminController::class) -> prefix('admin') -> group( function() {
     Route::get('/'    , 'index');
-    Route::resource('category', CategoryController::class);
-    Route::resource('news', NewsController::class);
-    Route::resource('users', UserController::class);
+    Route::resource('category', CategoryController::class) -> except('show');
+    Route::resource('news',     NewsController::class)     -> except('show');
+    Route::resource('users',    UserController::class);
 });
 
-// route đăng ký đăng nhập
+
+// Đăng ký đăng nhập
 Route::middleware('guest') -> group(function() {
-    Route::get      ('/register', [RegisteredUserController::class, 'create'  ]) -> name('register');;
-    Route::post     ('/register', [RegisteredUserController::class, 'store'   ]);
-    Route::get      ('/login',    [SessionsController::class,       'create'  ]) -> name('login');
-    Route::post     ('/login',    [SessionsController::class,       'store'   ]);
+    Route::get   ('/register', [RegisteredUserController::class, 'create'  ]) -> name('register');;
+    Route::post  ('/register', [RegisteredUserController::class, 'store'   ]);
+    Route::get   ('/login',    [SessionsController::class,       'create'  ]) -> name('login');
+    Route::post  ('/login',    [SessionsController::class,       'store'   ]);
 });
-
+// Đăng xuất
 Route::delete   ('/logout', [SessionsController::class, 'destroy' ]) -> middleware('auth');
 
+
+// Test
 Route::get('/test', function() {
-    return view('client.result');
+    return view('client.test');
 });

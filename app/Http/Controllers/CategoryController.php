@@ -54,7 +54,10 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return view('client.category', [
+            'category' => $category,
+            'news'     => $category -> news() -> latest('id') -> paginate(10),
+        ]);
     }
 
     /**

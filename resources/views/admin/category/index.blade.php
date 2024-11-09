@@ -50,7 +50,7 @@
                                         <i class="ri-pencil-line"></i>
                                     </a>
 
-                                    <a class="bg-primary" title="Chi tiết" href="{{ route('category.show' ,$cat -> id) }}">
+                                    <a class="bg-primary" title="Chi tiết" href="/category/{{$cat -> title}}">
                                         <i class="ri-information-line"></i>
                                     </a>
 

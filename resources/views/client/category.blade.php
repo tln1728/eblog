@@ -10,7 +10,7 @@
                     <div class="left-side-post-area">
                         <div class="featured-post latest-news">
                             <div class="section-title-area">
-                                <h4 class="section-title">{{$totalNewsCount}} kết quả</h4>
+                                <h3 class="section-title">Danh mục {{$category -> title}}</h3>
                             </div>
                             <div class="small-post latest-news">
                                 @foreach ($news as $new)
@@ -19,12 +19,7 @@
                                         <a href="{{route('news.show',$new -> slug)}}"><img src="{{Storage::url($new -> thumbnail)}}" style="width: 100%; height: 200px; object-fit: cover;"></a>
                                     </div>
                                     <div class="col-8 blog-content pe-5">
-                                        <!-- <div class="d-flex gap-2">
-                                            <p class="sub-title">asd</p>
-                                            <p class="sub-title">asd</p>
-                                            <p class="sub-title">asd</p>
-                                            <p class="sub-title">asd</p>
-                                        </div> -->
+                                        <p class="sub-title">{{$category -> title}}</p>
                                         <h5 class="heading-title"><a class="title-animation" href="{{route('news.show',$new -> slug)}}">{{$new->title}}</a></h5>
                                         <ul class="blog-meta">
                                             <li>
@@ -55,9 +50,9 @@
                                 </div>
                                 @endforeach
                             </div>
-                            @if ($totalNewsCount > 0)
-                            {{$news -> links()}}
-                            @endif
+                            <div>
+                                {{$news -> links()}}
+                            </div>
                         </div>
                     </div>
                 </div>

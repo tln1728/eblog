@@ -43,7 +43,7 @@
                 </ul>
             </div>
             <div class="footer-logo-area">
-                <a href="index-2.html" class="logo"><img src="client/assets/images/logo/logo-01-w.svg" alt=""></a>
+                <a href="index-2.html" class="logo"><img src="/client/assets/images/logo/logo-01-w.svg" alt=""></a>
                 <p class="desc">Nisi dignissim tortor sed quam sed ipsum ut tortor <br> sed dignissim montes, morbi euismod elit.</p>
             </div>
             <div class="footer-newsletter-area">
