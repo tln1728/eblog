@@ -70,8 +70,11 @@ class NewsController extends Controller
      */
     public function show(News $news)
     {
+        $comments = $news->comments()->paginate(8);
+        
         return view('client.single-post',[
             'new' => $news,
+            'comments' => $comments,
         ]);
     }
 

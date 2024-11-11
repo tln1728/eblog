@@ -38,7 +38,6 @@ class ClientController extends Controller
         // Thực hiện phân trang với 10 kết quả mỗi trang
         $news = $newsQuery -> paginate(10) -> appends(['kw' => $kw]);
 
-        // Trả về view với kết quả tìm kiếm
         return view('client.result', [
             'news' => $news,
             'kw' => $kw,

@@ -7,6 +7,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CommentsController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(ClientController::class) -> group( function() {
@@ -36,9 +37,18 @@ Route::middleware('guest') -> group(function() {
     Route::get   ('/login',    [SessionsController::class,       'create'  ]) -> name('login');
     Route::post  ('/login',    [SessionsController::class,       'store'   ]);
 });
+
 // Đăng xuất
 Route::delete   ('/logout', [SessionsController::class, 'destroy' ]) -> middleware('auth');
 
+
+Route::middleware('auth') -> group(function() {
+    Route::post('new/{news}/comments',          [CommentsController::class, 'store']) 
+        -> name('comments.store');
+
+    Route::post('new/{news}/{comment}/reply',   [CommentsController::class, 'reply']) 
+        -> name('comments.reply');
+}); 
 
 // Test
 Route::get('/test', function() {
