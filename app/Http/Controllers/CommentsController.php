@@ -32,9 +32,8 @@ class CommentsController extends Controller
             'parent_id' => 'nullable',
         ]);
         
-        Comment::create([
+        Auth::user() -> comments() -> create([
             'content' => $request -> content,
-            'user_id' => Auth::id(),
             'news_id' => $newsId,
         ]);
 

@@ -58,7 +58,7 @@
                     </x-forms.group>
                     
                 <x-forms.group :error="false">
-                    <img src="{{Storage::url($new -> thumbnail)}}" width="250" height="250">
+                    <img src="{{Storage::url($new -> thumbnail)}}" width="auto" height="250">
                 </x-forms.group>
 
                 <x-forms.group error="thumbnail">

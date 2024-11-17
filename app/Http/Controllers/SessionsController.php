@@ -23,25 +23,18 @@ class SessionsController extends Controller
     public function store(Request $request)
     {
         $attributes = $request->validate([
-            'email'     => 'required| email',
+            'email'     => 'required| email| max:255',
             'password'  => 'required',
         ]);
 
-        if (! User::where('email', $attributes['email']) -> exists()) {
-            throw ValidationException::withMessages([
-                'email' => 'Email not match',
-            ]);
+        if (Auth::attempt($attributes)) {
+            request()->session()->regenerate();
+            return redirect()->intended('/');
         }
-
-        if (! Auth::attempt($attributes)) {
-            throw ValidationException::withMessages([
-                'password' => 'Password not match',
-            ]);
-        }
-
-        request()->session()->regenerate();
-
-        return redirect('/');
+        
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]) -> onlyInput('email');
     }
 
     public function destroy()

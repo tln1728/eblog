@@ -37,7 +37,9 @@ class NewsPolicy
      */
     public function update(User $user, News $news)
     {
-        //
+        return $news -> user -> is($user)
+            ? Response::allow()
+            : Response::deny('You do not own this post.');
     }
 
     /**

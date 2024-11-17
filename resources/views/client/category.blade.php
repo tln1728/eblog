@@ -19,7 +19,11 @@
                                         <a href="{{route('news.show',$new -> slug)}}"><img src="{{Storage::url($new -> thumbnail)}}" style="width: 100%; height: 200px; object-fit: cover;"></a>
                                     </div>
                                     <div class="col-8 blog-content pe-5">
-                                        <p class="sub-title">{{$category -> title}}</p>
+                                        <div class="d-flex gap-3">
+                                            @foreach ($new -> categories as $cat)
+                                            <p class="sub-title">{{$cat -> title}}</p>
+                                            @endforeach
+                                        </div>
                                         <h5 class="heading-title"><a class="title-animation" href="{{route('news.show',$new -> slug)}}">{{$new->title}}</a></h5>
                                         <ul class="blog-meta">
                                             <li>

@@ -30,6 +30,10 @@ class User extends Authenticatable
         'password',
     ];
 
+    protected $attributes = [
+        'profile' => 'images/default-avatar.jpg',
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -78,8 +82,11 @@ class User extends Authenticatable
         }
     }
 
-
     public function news() {
         return $this -> hasMany(News::class);
+    }
+
+    public function comments() {
+        return $this -> hasMany(Comment::class);
     }
 }

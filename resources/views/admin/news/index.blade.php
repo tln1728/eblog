@@ -43,7 +43,7 @@
                             <td><a href="" class="text-dark">{{ $new -> user -> name  }}</a></td>
                             <td>
                             @foreach ($new -> categories as $cat)
-                                <a href="" class="badge border border-primary text-primary">{{$cat -> title}}</a>
+                                <a href="{{route('category.show',$cat -> title)}}" class="badge border border-primary text-primary">{{$cat -> title}}</a>
                             @endforeach
                             </td>
 
@@ -52,17 +52,18 @@
                             <td>{{ $new -> updated_at }} </td>
                             <td>
                                 <!-- data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" -->
-                                <div class="flex align-items-center list-user-action">
+                                <div class="list-user-action">
+                                    @can('update', $new)
                                     <a class="bg-primary" title="Sửa" href="{{ route('news.edit',$new -> id) }}">
                                         <i class="ri-pencil-line"></i>
                                     </a>
-
+                                    
                                     <x-forms.form action="{{ route('news.destroy' ,$new -> id) }}" class="d-inline" method="DELETE">
                                         <button onclick="return confirm('?')" type="submit" class="bg-danger text-white border-0 rounded" title="Xóa">
                                             <i class="ri-delete-bin-line"></i>
                                         </button>
                                     </x-forms.form>
-
+                                    @endcan
                                 </div>
                             </td>
                         </tr>

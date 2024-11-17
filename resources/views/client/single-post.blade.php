@@ -131,7 +131,7 @@
                                 <div class="border-primary ps-2 border-3 border-start my-5">
                                     <div class="d-flex gap-3">
                                         <div class="d-flex flex-column align-items-center gap-3">
-                                            <img src="https://via.placeholder.com/50" alt="Profile Picture" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                                            <img src="{{Storage::url($cmt -> user -> profile)}}" alt="Profile Picture" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
                                             <details>
                                                 <summary class="w-auto py-2 px-3 btn-primary d-inline-block">Reply</summary>
                                                 <x-forms.form action="{{route('comments.reply',[
@@ -164,7 +164,7 @@
                                                 @foreach ($cmt -> replies as $reply)
                                                     <div class="ps-4 mt-3">
                                                         <div class="d-flex">
-                                                            <img src="https://via.placeholder.com/50" alt="Profile Picture" class="me-3 rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                                                            <img src="{{Storage::url($cmt -> user -> profile)}}" alt="Profile Picture" class="me-3 rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
                                                             <div>
                                                                 <h5 class="m-0">{{$reply -> user -> name}}</h5>
                                                                 <small class="text-muted">Posted on: {{$reply -> created_at}}</small>

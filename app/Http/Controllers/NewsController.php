@@ -8,22 +8,20 @@ use App\Http\Requests\UpdateNewsRequest;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class NewsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
         return view('admin.news.index', [
+            // 'news' => $user -> news() -> with(['categories:id,title','user:id,name']) -> latest('id') -> paginate(10),
             'news' => News::with(['categories:id,title','user:id,name']) -> latest('id') -> paginate(10),
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('admin.news.create',[
@@ -31,9 +29,6 @@ class NewsController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreNewsRequest $request)
     {
         DB::beginTransaction();
@@ -47,10 +42,10 @@ class NewsController extends Controller
                 $thumbnailPath = $request -> file('thumbnail') -> store('thumbnails');
                 $data['thumbnail'] = $thumbnailPath;
             }
-            // ---
-            $data['user_id'] = Auth::user() -> id;
 
-            $news = News::create($data);
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+            $news = $user -> news() -> create($data);
 
             // thêm vào bảng pivot category_news
             $news -> categories() -> attach($data['category']);
@@ -65,12 +60,9 @@ class NewsController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(News $news)
     {
-        $comments = $news->comments()->paginate(8);
+        $comments = $news->comments()->latest('id')->paginate(8);
         
         return view('client.single-post',[
             'new' => $news,
@@ -78,11 +70,10 @@ class NewsController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(News $news)
     {
+        Gate::authorize('update',$news);
+        
         $selectedCategory = $news -> categories -> pluck('id') -> toArray();
 
         return view('admin.news.edit',[
@@ -92,9 +83,6 @@ class NewsController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateNewsRequest $request, News $news)
     {
         DB::beginTransaction();
@@ -126,9 +114,6 @@ class NewsController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(News $news)
     {
         $news->delete();

@@ -22,8 +22,9 @@ Route::get('new/{news:slug}',           [NewsController::class,      'show']) ->
 
 
 // Admin crud
-Route::middleware('auth') -> controller(AdminController::class) -> prefix('admin') -> group( function() {
-    Route::get('/'    , 'index');
+Route::middleware('auth') -> prefix('admin') -> group( function() {
+    Route::get('/', [AdminController::class,'index']) -> name('dashboard');
+    
     Route::resource('category', CategoryController::class) -> except('show');
     Route::resource('news',     NewsController::class)     -> except('show');
     Route::resource('users',    UserController::class);

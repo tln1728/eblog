@@ -1,8 +1,7 @@
-<!-- side bar for desktop -->
-<div id="side-bar" class="side-bar header-one">
+<!-- <div id="side-bar" class="side-bar header-one">
+
     <div class="inner">
         <button class="close-icon-menu"><i class="far fa-times"></i></button>
-        <!-- inner menu area desktop start -->
         <div class="inner-main-wrapper-desk d-none d-lg-block">
             <div class="thumbnail">
                 <img src="client/assets/images/logo/logo-01-w.svg" alt="eblog">
@@ -24,7 +23,7 @@
             </div>
         </div>
     </div>
-    <!-- mobile menu area start -->
+
     <div class="mobile-menu d-block d-lg-none">
         <nav class="nav-main mainmenu-nav mt--30">
             <ul class="mainmenu" id="mobile-menu-active">
@@ -70,6 +69,5 @@
             </ul>
         </nav>
     </div>
-    <!-- mobile menu area end -->
-</div>
-<!-- header style two End -->
+
+</div> -->
