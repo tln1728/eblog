@@ -8,6 +8,31 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
+    public function index() {
+        return view('admin.comments.index', [
+            'comments' => Auth::user() -> comments() 
+            -> with(['news:id,title,slug','parent']) 
+            -> latest() 
+            -> paginate(10),
+        ]);
+    }
+
+    public function update(Request $request, $newsId, Comment $comment) {
+        dd('update cmt', func_get_args());
+    }
+
+    public function updateReply(Request $request, $newsId, $cmtId) {
+        dd('update reply', func_get_args());
+    }
+
+    public function destroy(Comment $comment) {
+        dd($comment -> content);
+
+        $comment->delete();
+
+        return redirect() -> back() -> with('success', 'Xóa thành công.');
+    }
+
     public function reply(Request $request, $newsId, $cmtId)
     {
         $request->validate([
@@ -15,10 +40,9 @@ class CommentsController extends Controller
             'parent_id' => 'exists:comments,id',
         ]);
         
-        Comment::create([
-            'content'   => $request -> reply_content,
-            'user_id'   => Auth::id(),
-            'news_id'   => $newsId,
+        Auth::user() -> comments() -> create([
+            'content' => $request -> reply_content,
+            'news_id' => $newsId,
             'parent_id' => $cmtId,
         ]);
 

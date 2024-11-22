@@ -16,9 +16,16 @@ class NewsController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
+
+        $sort = request() -> get('sort', 'id');
+        $direction = request() -> get('direction', 'desc');
+
         return view('admin.news.index', [
             // 'news' => $user -> news() -> with(['categories:id,title','user:id,name']) -> latest('id') -> paginate(10),
-            'news' => News::with(['categories:id,title','user:id,name']) -> latest('id') -> paginate(10),
+            'news' => News::with(['categories:title','user']) 
+                -> withCount('comments') 
+                -> orderBy($sort, $direction) 
+                -> paginate(10),
         ]);
     }
 
@@ -62,7 +69,10 @@ class NewsController extends Controller
 
     public function show(News $news)
     {
-        $comments = $news->comments()->latest('id')->paginate(8);
+        $comments = $news -> comments() 
+        -> with(['replies.user','user']) 
+        -> latest('id')
+        -> paginate(8);
         
         return view('client.single-post',[
             'new' => $news,
@@ -118,7 +128,6 @@ class NewsController extends Controller
     {
         $news->delete();
 
-        return redirect() -> route('news.index')
-        ->with('success', 'Xóa tin thành công.');
+        return redirect() -> back() ->with('success', 'Xóa tin thành công.');
     }
 }

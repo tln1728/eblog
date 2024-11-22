@@ -1,6 +1,11 @@
 @extends('client.layout.master')
 
 @section('content')
+@if(session('success'))
+<div class="alert alert-success font-bold">
+    {{ session('success') }}
+</div>
+@endif
 
 <section class="eblog-featured-post-area area-2 tp-section-gapTop">
     <div class="container">
@@ -22,7 +27,7 @@
 
                             <div class="blog-content-area">
                                 <ul class="blog-meta">
-                                    <li class="author"><span>BY</span>Elon Mask - 14 Jan, 2024 </li>
+                                    <li class="author"><span>BY</span>{{$new -> user -> name}} - {{$new -> created_at}}</li>
                                     <li>
                                         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <g clip-path="url(#clip0_4238_1230)">
@@ -42,7 +47,7 @@
                                             <rect x="11.1426" y="6.96387" width="1.85714" height="5.57143" fill="#1E1E1E" />
                                             <rect x="5.57227" y="0.463867" width="1.85714" height="12.0714" fill="#1E1E1E" />
                                         </svg>
-                                        1.9k views
+                                        {{$new -> views}} views
                                     </li>
                                 </ul>
                                 <div class="eblog-social">
@@ -130,6 +135,7 @@
                                 @foreach ($comments as $cmt)
                                 <div class="border-primary ps-2 border-3 border-start my-5">
                                     <div class="d-flex gap-3">
+                                        <!-- single cmt -->
                                         <div class="d-flex flex-column align-items-center gap-3">
                                             <img src="{{Storage::url($cmt -> user -> profile)}}" alt="Profile Picture" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
                                             <details>
@@ -150,30 +156,74 @@
                                                     <button type="submit" class="btn btn-primary">Submit Comment</button>
                                                 </x-forms.form>
                                             </details>
+
+                                            <button class="btn-edit {{$cmt -> user() -> is(Auth::user()) ? '' : 'd-none'}}">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+
+                                            <x-forms.form method="delete" action="{{route('comments.destroy', $cmt -> id)}}">
+                                                <button class="{{$cmt -> user() -> is(Auth::user()) ? '' : 'd-none'}}" type="submit">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </x-forms.form>
                                         </div>
 
                                         <div>
                                             <h5 class="m-0">{{$cmt -> user -> name}}</h5>
                                             <small class="text-muted">Posted on: {{$cmt -> created_at}}</small>
-                                            <p class="mb-3">{{$cmt -> content}}</p>
+                                            <x-forms.form class="form-content" action="{{route('comments.update',[
+                                                    'news'    => $new -> id,
+                                                    'comment' => $cmt -> id
+                                                    ])}}" method="put">
+                                                <textarea name="content" style="resize: none;" class="mb-3 content border" rows="3" disabled>{{$cmt -> content}}</textarea>
+                                                <div class="d-flex">
+                                                    <button type="reset" class="btn-cancel btn-danger d-none">Cancel</button>
+                                                    <button type="submit" class="btn-save btn-primary d-none">Save</button>
+                                                </div>
+                                            </x-forms.form>
 
                                             <!-- Replies  -->
                                             @if (count($cmt -> replies) > 0)
                                             <details>
                                                 <summary class="d-inline-block">▼ Show reply</summary>
                                                 @foreach ($cmt -> replies as $reply)
-                                                    <div class="ps-4 mt-3">
-                                                        <div class="d-flex">
-                                                            <img src="{{Storage::url($cmt -> user -> profile)}}" alt="Profile Picture" class="me-3 rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
-                                                            <div>
-                                                                <h5 class="m-0">{{$reply -> user -> name}}</h5>
-                                                                <small class="text-muted">Posted on: {{$reply -> created_at}}</small>
-                                                                <p class="mb-3">{{$reply -> content}}</p>
-                                                            </div>
+                                                <div class="ps-4 mt-3">
+                                                    <!-- reply content  -->
+                                                    <div class="d-flex">
+                                                        <img src="{{Storage::url($cmt -> user -> profile)}}" alt="Profile Picture" class="me-3 rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                                                        <div>
+                                                            <h5 class="m-0">{{$reply -> user -> name}}</h5>
+                                                            <small class="text-muted">Posted on: {{$reply -> created_at}}</small>
+
+                                                            <x-forms.form class="form-content" action="{{route('comments.reply.update',[
+                                                                'news'    => $new -> id,
+                                                                'comment' => $reply -> id,
+                                                            ])}}" method="put">
+                                                                <textarea name="content" style="resize: none;" class="mb-3 content border" rows="3" disabled>{{$reply -> content}}</textarea>
+                                                                <div class="d-flex">
+                                                                    <button type="reset" class="btn-cancel btn-danger d-none">Cancel</button>
+                                                                    <button type="submit" class="btn-save btn-primary d-none">Save</button>
+                                                                </div>
+                                                            </x-forms.form>
                                                         </div>
                                                     </div>
+
+                                                    <!-- reply edit  -->
+                                                    <div class="d-flex">
+                                                        <button class="btn-edit {{$reply -> user() -> is(Auth::user()) ? '' : 'd-none'}}">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+
+                                                        <x-forms.form method="delete" action="{{route('comments.destroy', $reply -> id)}}">
+                                                            <button class="{{$reply -> user() -> is(Auth::user()) ? '' : 'd-none'}}" type="submit">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </button>
+                                                        </x-forms.form>
+                                                    </div>
+                                                </div>
+
                                                 @endforeach
-                                                </details>
+                                            </details>
                                             @endif
                                         </div>
                                     </div>
@@ -420,8 +470,6 @@
     </div>
 </section>
 
-
-
 <section class="eblog-bottom-post-area tp-section-gap">
     <div class="container">
         <h3 class="section-title text-center">You Might Like This</h3>
@@ -488,4 +536,47 @@
     </div>
 </section>
 
+<script>
+    let editBtns = document.querySelectorAll('.btn-edit');
+    let cancelBtns = document.querySelectorAll('.btn-cancel');
+    let formContent = document.querySelectorAll('.form-content');
+
+    cancelBtns.forEach((btn, i) => {
+        btn.addEventListener('click', () => {
+            cancel_edit(formContent[i]);
+        })
+    })
+
+    editBtns.forEach((btn, i) => {
+        btn.addEventListener('click', () => {
+            focus_edit(formContent[i])
+        })
+    })
+
+    function focus_edit(e) {
+        if (e) {
+            let content = e.querySelector('.content');
+            let cancel = e.querySelector('.btn-cancel');
+            let save = e.querySelector('.btn-save');
+            content.disabled = false;
+            content.focus();
+
+            cancel.classList.remove('d-none');
+            save.classList.remove('d-none');
+
+        }
+    }
+
+    function cancel_edit(e) {
+        if (e) {
+            let content = e.querySelector('.content');
+            let cancel = e.querySelector('.btn-cancel');
+            let save = e.querySelector('.btn-save');
+            content.disabled = true;
+
+            cancel.classList.add('d-none');
+            save.classList.add('d-none');
+        }
+    }
+</script>
 @endsection

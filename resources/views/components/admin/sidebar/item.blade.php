@@ -1,16 +1,16 @@
-@props(['type'])
+@props(['path', 'dropdown' => true])
 
-@if ($type != 'admin')
+@if ($dropdown)
 
-<li class="{{set_active_class($type.'*')}}">
+<li class="{{set_active_class($path.'*')}}">
 
-    <a href="#{{$type}}" class="iq-waves-effect collapsed" data-toggle="collapse">
+    <a href="#{{$path}}" class="iq-waves-effect collapsed" data-toggle="collapse">
         <span class="ripple rippleEffect"></span>
         {{ $slot }}
         <i class="ri-arrow-right-s-line iq-arrow-right"></i>
     </a>
 
-    <ul id="{{$type}}" class="iq-submenu collapse {{set_active_class($type.'*', 'show')}}" data-parent="#iq-sidebar-toggle">
+    <ul id="{{$path}}" class="iq-submenu collapse {{set_active_class($path.'*', 'show')}}" data-parent="#iq-sidebar-toggle">
         @isset($sidebar_links)
         {{ $sidebar_links }}
         @endisset
@@ -18,10 +18,9 @@
 </li>
 
 @else
-    <li class="{{ request() -> is('admin') ? 'active' : "" }}">
-        <a href="/admin" class="iq-waves-effect">
-            <span class="ripple rippleEffect"></span><i class="las la-home iq-arrow-left"></i>
-            <span>Tổng quan</span>
+    <li class="{{ request() -> is($path) ? 'active' : "" }}">
+        <a href="/{{$path}}" class="iq-waves-effect">
+            {{$slot}}
         </a>
     </li>
 @endif

@@ -5,10 +5,12 @@
     $urhhh = request('sort') == $sort;
 @endphp
 
-<a href="{{ route($route,[
+<div class="d-inline-block">
+    <a href="{{ route($route,[
     'sort'      => $sort,
     'direction' => $dir,
-]) }}">
-<span class="{{ $dir == 'asc'  && $urhhh ? 'text-primary' : 'text-dark' }}">↓</span>
-<span class="{{ $dir == 'desc' && $urhhh ? 'text-primary' : 'text-dark' }}">↑</span>
-</a>
+    ]) }}">
+        <span class="{{ $dir == 'asc'  && $urhhh ? 'text-primary' : 'text-dark' }}">↓</span>
+        <span class="{{ $dir == 'desc' && $urhhh ? 'text-primary' : 'text-dark' }}">↑</span>
+    </a>
+</div>

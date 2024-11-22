@@ -27,7 +27,7 @@ class StoreNewsRequest extends FormRequest
             'category.*' => 'exists:categories,id', // Kiểm tra danh mục có tồn tại trong bảng categories
             'content'    => 'required',
             'summary'    => 'required',
-            'thumbnail'  => 'required|image|mimes:jpg,png,webp|max:4096',
+            'thumbnail'  => 'image|mimes:jpg,png,webp|max:4096',
         ];
     }
 
@@ -39,7 +39,7 @@ class StoreNewsRequest extends FormRequest
             'category.*'         => 'Danh mục không hợp lệ',
             'content.required'   => 'Nội dung không được để trống',
             'summary.required'   => 'Vui lòng nhập tóm tắt',
-            'thumbnail.required' => 'Ảnh thumbnail là bắt buộc',
+            // 'thumbnail.required' => 'Ảnh thumbnail là bắt buộc',
             'thumbnail.image'    => 'Ảnh không đúng định dạng jpg, png hoặc webp',
         ];
     }

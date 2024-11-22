@@ -14,6 +14,7 @@ class User extends Authenticatable
 
     const ROLE_ADMIN = 0;
     const ROLE_USER = 1;
+    const ROLE_AUTHOR = 2;
 
     const STATUS_ACTIVE = 0;
     const STATUS_INACTIVE = 1;

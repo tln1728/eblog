@@ -28,6 +28,7 @@ Route::middleware('auth') -> prefix('admin') -> group( function() {
     Route::resource('category', CategoryController::class) -> except('show');
     Route::resource('news',     NewsController::class)     -> except('show');
     Route::resource('users',    UserController::class);
+    Route::resource('comments', CommentsController::class);
 });
 
 
@@ -49,6 +50,12 @@ Route::middleware('auth') -> group(function() {
 
     Route::post('new/{news}/{comment}/reply',   [CommentsController::class, 'reply']) 
         -> name('comments.reply');
+
+    Route::put('new/{news}/{comment}',   [CommentsController::class, 'update']) 
+        -> name('comments.update');
+
+    Route::put('new/{news}/{comment}/reply',   [CommentsController::class, 'updateReply']) 
+        -> name('comments.reply.update');
 }); 
 
 // Test

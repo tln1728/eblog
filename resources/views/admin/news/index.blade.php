@@ -27,6 +27,9 @@
                             <th width="auto">Tiêu đề</th>
                             <th width="auto">Người đăng</th>
                             <th width="auto">Danh mục</th>
+                            <th width="9%">Bình luận 
+                                <x-admin.sort-btn route="news.index" sort="comments_count"/>
+                            </th>
                             <th width="10%">Lượt xem</th>
                             <th width="auto">Ngày đăng</th>
                             <th width="auto">Cập nhật</th>
@@ -47,14 +50,18 @@
                             @endforeach
                             </td>
 
-                            <td>{{ $new -> views      }} </td>
-                            <td>{{ $new -> created_at }} </td>
-                            <td>{{ $new -> updated_at }} </td>
+                            <td>
+                                {{$new -> comments_count }} 
+                            </td>
+
+                            <td>{{$new -> views          }} </td>
+                            <td>{{$new -> created_at     }} </td>
+                            <td>{{$new -> updated_at     }} </td>
                             <td>
                                 <!-- data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" -->
                                 <div class="list-user-action">
                                     @can('update', $new)
-                                    <a class="bg-primary" title="Sửa" href="{{ route('news.edit',$new -> id) }}">
+                                    <a class="bg-primary" title="Sửa" href="{{route('news.edit',$new -> id) }}">
                                         <i class="ri-pencil-line"></i>
                                     </a>
                                     
