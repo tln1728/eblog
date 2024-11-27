@@ -45,17 +45,14 @@ Route::delete   ('/logout', [SessionsController::class, 'destroy' ]) -> middlewa
 
 
 Route::middleware('auth') -> group(function() {
-    Route::post('new/{news}/comments',          [CommentsController::class, 'store']) 
+    Route::post('new/{news:slug}/comments',          [CommentsController::class, 'store']) 
         -> name('comments.store');
 
-    Route::post('new/{news}/{comment}/reply',   [CommentsController::class, 'reply']) 
+    Route::post('new/{news:slug}/{comment}/reply',   [CommentsController::class, 'store']) 
         -> name('comments.reply');
 
-    Route::put('new/{news}/{comment}',   [CommentsController::class, 'update']) 
+    Route::put('new/{comment}',                      [CommentsController::class, 'update']) 
         -> name('comments.update');
-
-    Route::put('new/{news}/{comment}/reply',   [CommentsController::class, 'updateReply']) 
-        -> name('comments.reply.update');
 }); 
 
 // Test

@@ -7,6 +7,12 @@
 </div>
 @endif
 
+@if(session('error'))
+<div class="alert alert-danger font-bold">
+    {{ session('error') }}
+</div>
+@endif
+
 <section class="eblog-featured-post-area area-2 tp-section-gapTop">
     <div class="container">
         <div class="section-inner">
@@ -105,7 +111,7 @@
                             <div class="bottom-area">
                                 <!-- comment form -->
                                 <div class="post-comment-box mt--80">
-                                    <x-forms.form action="{{route('comments.store',$new -> id)}}" method="post">
+                                    <x-forms.form action="{{route('comments.store',$new -> slug)}}" method="post">
                                         <h3 class="form-title">Leave A Comment</h3>
                                         <div class="form-inner inner">
                                             <x-forms.group error="content" class="single-input-wrapper">
@@ -130,6 +136,20 @@
                                         </div>
                                     </x-forms.form>
                                 </div>
+                                
+                                <x-forms.form>                                    
+                                    <x-forms.input
+                                        type="select"
+                                        label="Comment mỗi trang"
+                                        name="perPage"
+                                        onchange="this.form.submit()">
+                                        
+                                        <option value="10" {{ request('perPage') == 10 ? 'selected' : '' }}>10</option>
+                                        <option value="15" {{ request('perPage') == 15 ? 'selected' : '' }}>15</option>
+                                        <option value="20" {{ request('perPage') == 20 ? 'selected' : '' }}>20</option>
+                                        <option value="30" {{ request('perPage') == 30 ? 'selected' : '' }}>30</option>
+                                    </x-forms.input>
+                                </x-forms.form>
 
                                 <!-- comments -->
                                 @foreach ($comments as $cmt)
@@ -141,40 +161,38 @@
                                             <details>
                                                 <summary class="w-auto py-2 px-3 btn-primary d-inline-block">Reply</summary>
                                                 <x-forms.form action="{{route('comments.reply',[
-                                                    'news'    => $new -> id,
+                                                    'news'    => $new -> slug,
                                                     'comment' => $cmt -> id
                                                     ])}}" method="post">
 
                                                     <input type="hidden" name="parent_id" value="{{$cmt -> id}}">
 
-                                                    <x-forms.group error="reply_content">
+                                                    <x-forms.group error="content">
                                                         <x-forms.textarea
                                                             class="border mt-3"
                                                             cols="50" rows="5"
-                                                            name="reply_content" />
+                                                            name="content" />
                                                     </x-forms.group>
                                                     <button type="submit" class="btn btn-primary">Submit Comment</button>
                                                 </x-forms.form>
                                             </details>
 
-                                            <button class="btn-edit {{$cmt -> user() -> is(Auth::user()) ? '' : 'd-none'}}">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-
-                                            <x-forms.form method="delete" action="{{route('comments.destroy', $cmt -> id)}}">
-                                                <button class="{{$cmt -> user() -> is(Auth::user()) ? '' : 'd-none'}}" type="submit">
-                                                    <i class="fas fa-trash-alt"></i>
+                                            <div class="d-flex">
+                                                <button class="btn-edit {{$cmt -> user() -> is(Auth::user()) ? '' : 'd-none'}}">
+                                                    <i class="fas fa-edit"></i>
                                                 </button>
-                                            </x-forms.form>
+                                                <x-forms.form method="delete" action="{{route('comments.destroy', $cmt -> id)}}">
+                                                    <button onclick="return confirm('are u sure')" class="{{$cmt -> user() -> is(Auth::user()) ? '' : 'd-none'}}" type="submit">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </x-forms.form>
+                                            </div>
                                         </div>
 
                                         <div>
                                             <h5 class="m-0">{{$cmt -> user -> name}}</h5>
                                             <small class="text-muted">Posted on: {{$cmt -> created_at}}</small>
-                                            <x-forms.form class="form-content" action="{{route('comments.update',[
-                                                    'news'    => $new -> id,
-                                                    'comment' => $cmt -> id
-                                                    ])}}" method="put">
+                                            <x-forms.form class="form-content" action="{{route('comments.update', $cmt -> id)}}" method="put">
                                                 <textarea name="content" style="resize: none;" class="mb-3 content border" rows="3" disabled>{{$cmt -> content}}</textarea>
                                                 <div class="d-flex">
                                                     <button type="reset" class="btn-cancel btn-danger d-none">Cancel</button>
@@ -195,10 +213,7 @@
                                                             <h5 class="m-0">{{$reply -> user -> name}}</h5>
                                                             <small class="text-muted">Posted on: {{$reply -> created_at}}</small>
 
-                                                            <x-forms.form class="form-content" action="{{route('comments.reply.update',[
-                                                                'news'    => $new -> id,
-                                                                'comment' => $reply -> id,
-                                                            ])}}" method="put">
+                                                            <x-forms.form class="form-content" action="{{route('comments.update',$reply -> id)}}" method="put">
                                                                 <textarea name="content" style="resize: none;" class="mb-3 content border" rows="3" disabled>{{$reply -> content}}</textarea>
                                                                 <div class="d-flex">
                                                                     <button type="reset" class="btn-cancel btn-danger d-none">Cancel</button>
@@ -215,7 +230,7 @@
                                                         </button>
 
                                                         <x-forms.form method="delete" action="{{route('comments.destroy', $reply -> id)}}">
-                                                            <button class="{{$reply -> user() -> is(Auth::user()) ? '' : 'd-none'}}" type="submit">
+                                                            <button onclick="return confirm('are u sure')" class="{{$reply -> user() -> is(Auth::user()) ? '' : 'd-none'}}" type="submit">
                                                                 <i class="fas fa-trash-alt"></i>
                                                             </button>
                                                         </x-forms.form>

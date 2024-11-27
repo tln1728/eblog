@@ -3,64 +3,62 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:update,comment')->only(['edit', 'update', 'destroy']);
+    }
+
     public function index() {
+        $sort = request() -> get('sort', 'id');
+        $direction = request() -> get('direction', 'desc');
+
         return view('admin.comments.index', [
             'comments' => Auth::user() -> comments() 
-            -> with(['news:id,title,slug','parent']) 
-            -> latest() 
+            -> with(['news:id,title,slug','parent.user']) 
+            -> orderBy($sort,$direction)
             -> paginate(10),
         ]);
     }
 
-    public function update(Request $request, $newsId, Comment $comment) {
-        dd('update cmt', func_get_args());
-    }
-
-    public function updateReply(Request $request, $newsId, $cmtId) {
-        dd('update reply', func_get_args());
-    }
-
-    public function destroy(Comment $comment) {
-        dd($comment -> content);
-
-        $comment->delete();
-
-        return redirect() -> back() -> with('success', 'Xóa thành công.');
-    }
-
-    public function reply(Request $request, $newsId, $cmtId)
+    public function store(Request $request, News $news, $cmtId = null)
     {
         $request->validate([
-            'reply_content' => 'required',
-            'parent_id' => 'exists:comments,id',
+            'content'   => 'required|max:5000',
+            'parent_id' => 'nullable|exists:comments,id',
         ]);
-        
+
         Auth::user() -> comments() -> create([
-            'content' => $request -> reply_content,
-            'news_id' => $newsId,
+            'content'   => $request -> content,
+            'news_id'   => $news -> id,
             'parent_id' => $cmtId,
         ]);
 
         return redirect()->back()->with('success', 'Comment added successfully.');
     }
-    
-    public function store(Request $request, $newsId)
-    {
-        $request->validate([
-            'content' => 'required',
-            'parent_id' => 'nullable',
-        ]);
-        
-        Auth::user() -> comments() -> create([
-            'content' => $request -> content,
-            'news_id' => $newsId,
+
+    public function edit(Comment $comment) {
+        return view('admin.comments.edit',['cmt' => $comment]);
+    }
+
+    public function update(Request $request, Comment $comment) {
+        $data = $request->validate([
+            'content'   => 'required|max:5000',
         ]);
 
-        return redirect()->back()->with('success', 'Comment added successfully.');
+        $comment -> update($data);
+
+        return redirect()->back()->with('success', 'Comment updated successfully.');
+    }
+
+    public function destroy(Comment $comment) {
+        $comment->delete();
+
+        return redirect() -> back() -> with('success', 'Xóa thành công.');
     }
 }

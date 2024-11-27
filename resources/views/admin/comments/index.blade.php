@@ -22,7 +22,9 @@
                     <thead>
                         <tr>
                             <th width="auto">Nội dung</th>
-                            <th width="auto">Ngày đăng</th>
+                            <th width="auto">Ngày đăng
+                                <x-admin.sort-btn route="comments.index" sort="created_at"/>
+                            </th>
                             <th width="20%">Bài viết</th>
                             <th width="auto">Hành động</th>
                         </tr>
@@ -44,6 +46,11 @@
                             <td>
                                 <!-- data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit" -->
                                 <div class="flex align-items-center list-user-action">
+
+                                    <a class="bg-primary" title="Sửa" href="{{route('comments.edit' ,$cmt -> id) }}">
+                                        <i class="ri-pencil-line"></i>
+                                    </a>
+
                                     <x-forms.form action="{{route('comments.destroy' ,$cmt -> id) }}" class="d-inline" method="DELETE">
                                         <button onclick="return confirm('?')" type="submit" class="bg-danger text-white border-0 rounded" title="Xóa">
                                             <i class="ri-delete-bin-line"></i>

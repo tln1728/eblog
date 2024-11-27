@@ -69,10 +69,16 @@ class NewsController extends Controller
 
     public function show(News $news)
     {
+        $perPage = request() -> get('perPage', 10);
+        
+        if (!in_array($perPage,[10,15,20,30])) {
+            $perPage = 10;
+        }
+
         $comments = $news -> comments() 
         -> with(['replies.user','user']) 
         -> latest('id')
-        -> paginate(8);
+        -> paginate($perPage) -> appends(['perPage' => $perPage]);
         
         return view('client.single-post',[
             'new' => $news,
