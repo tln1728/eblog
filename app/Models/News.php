@@ -26,6 +26,10 @@ class News extends Model
         return $this -> belongsTo(User::class);
     }
 
+    public function userHistory() {
+        return $this -> belongsToMany(User::class);
+    }
+
     public function comments() {
         return $this -> hasMany(Comment::class) -> whereNull('parent_id');
     }

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\View\Composers\CategoryComposer;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -23,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrapFive();
+        Model::preventLazyLoading();
         View::composer('client.partials.nav', CategoryComposer::class);
     }
 }

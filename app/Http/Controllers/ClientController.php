@@ -9,7 +9,9 @@ class ClientController extends Controller
 {
     public function index()
     {
-        return view('client.home');
+        return view('client.home',[
+            'latestNews' => News::latest() -> paginate(10),
+        ]);
     }
 
     function search_news()
@@ -42,6 +44,16 @@ class ClientController extends Controller
             'news' => $news,
             'kw' => $kw,
             'totalNewsCount' => $totalNewsCount,  // Truyền tổng số bài viết tìm được
+        ]);
+    }
+
+    public function history() {
+        return view('client.news.history',[
+            'newsHistory' => auth() -> user() 
+                -> newsHistory() 
+                -> with('categories:id,title') 
+                -> latest('viewed_at')
+                -> paginate(15),
         ]);
     }
 }

@@ -14,9 +14,6 @@ class NewsController extends Controller
 {
     public function index()
     {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-
         $sort = request() -> get('sort', 'id');
         $direction = request() -> get('direction', 'desc');
 
@@ -38,21 +35,19 @@ class NewsController extends Controller
 
     public function store(StoreNewsRequest $request)
     {
-        DB::beginTransaction();
+        $data = $request -> validated();
         
+        DB::beginTransaction();
+
         try {
-            $data = $request -> validated();
-            
             // xu ly anh
             $thumbnailPath = null;
             if ($request -> hasFile('thumbnail')) {
-                $thumbnailPath = $request -> file('thumbnail') -> store('thumbnails');
+                $thumbnailPath = $request -> file('thumbnail') -> store('public/thumbnails');
                 $data['thumbnail'] = $thumbnailPath;
             }
 
-            /** @var \App\Models\User $user */
-            $user = Auth::user();
-            $news = $user -> news() -> create($data);
+            $news = Auth::user() -> news() -> create($data);
 
             // thêm vào bảng pivot category_news
             $news -> categories() -> attach($data['category']);
@@ -79,8 +74,12 @@ class NewsController extends Controller
         -> with(['replies.user','user']) 
         -> latest('id')
         -> paginate($perPage) -> appends(['perPage' => $perPage]);
-        
-        return view('client.single-post',[
+
+        if (Auth::check()) {
+            Auth::user() -> addToHistory($news);
+        };
+
+        return view('client.news.single-post',[
             'new' => $news,
             'comments' => $comments,
         ]);
@@ -110,7 +109,7 @@ class NewsController extends Controller
             $thumbnailPath = null;
             if ($request -> hasFile('thumbnail')) {
 
-                $thumbnailPath = $request -> file('thumbnail') -> store('thumbnails');
+                $thumbnailPath = $request -> file('thumbnail') -> store('public/thumbnails');
                 $data['thumbnail'] = $thumbnailPath;
 
             } else $data['thumbnail'] = $news -> thumbnail;

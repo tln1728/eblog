@@ -27,7 +27,7 @@ class StoreNewsRequest extends FormRequest
             'category.*' => 'exists:categories,id', // Kiểm tra danh mục có tồn tại trong bảng categories
             'content'    => 'required',
             'summary'    => 'required',
-            'thumbnail'  => 'image|mimes:jpg,png,webp|max:4096',
+            'thumbnail'  => 'image|mimes:jpg,png,webp,gif|max:10000',
         ];
     }
 

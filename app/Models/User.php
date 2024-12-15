@@ -90,4 +90,20 @@ class User extends Authenticatable
     public function comments() {
         return $this -> hasMany(Comment::class);
     }
+
+    public function histories() {
+        return $this -> hasMany(History::class);
+    }
+
+    public function newsHistory() {
+        return $this -> belongsToMany(News::class,'histories');
+    }
+
+    public function addToHistory(News $news)
+    {
+        $this -> histories() -> updateOrCreate(
+            ['news_id' => $news -> id],
+            ['viewed_at' => now()]
+        );
+    }
 }

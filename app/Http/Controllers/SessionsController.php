@@ -29,7 +29,7 @@ class SessionsController extends Controller
 
         if (Auth::attempt($attributes)) {
             request()->session()->regenerate();
-            return redirect()->intended('/');
+            return redirect() -> intended('/');
         }
         
         return back()->withErrors([

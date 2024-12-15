@@ -56,7 +56,7 @@ class CategoryController extends Controller
     {
         return view('client.category', [
             'category' => $category,
-            'news'     => $category -> news() -> latest('id') -> paginate(10),
+            'news'     => $category -> news() -> with('categories') -> latest('id') -> paginate(10),
         ]);
     }
 
